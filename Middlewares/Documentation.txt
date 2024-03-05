@@ -17,6 +17,7 @@ The Error object contains following:
     {
         "statusCode": validStatusCode,
         "type": ErrorType,
+        "errorMessage": "Your message",
         :
         :
     }
