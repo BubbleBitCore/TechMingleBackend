@@ -9,7 +9,15 @@ export class GlobalError extends Error {
 
 export class RouteError extends GlobalError {
   constructor(message, statusCode, route) {
-    super(message,statusCode);
+    super(message, statusCode);
     this.route = route;
   }
 }
+
+
+// Actual Error Middleware
+
+export const HandleError = (error, req, res, next) => {
+  if (!error) return next();
+  res.status(error.statusCode).json({ success: false, error: error });
+};

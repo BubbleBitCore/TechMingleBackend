@@ -3,7 +3,7 @@ import { configDotenv } from "dotenv";
 import path from "path";
 import cors from "cors"; // for cors handling
 import cookieParser from "cookie-parser"; // for cookies
-import { RouteError } from "./Middlewares/errorMiddleware.js";
+import { HandleError, RouteError } from "./Middlewares/errorMiddleware.js";
 
 // Importing all Routes Here
 
@@ -49,7 +49,4 @@ app.all("*", (req, res, next) => {
 });
 
 // Global Error Middleware
-app.use((error, req, res, next) => {
-  if (!error) return next();
-  res.status(error.statusCode).json({ success: false, error: error });
-});
+app.use(HandleError);
