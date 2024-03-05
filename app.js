@@ -1,11 +1,11 @@
 import express from "express";
 import { configDotenv } from "dotenv";
 import path from "path";
-import cors from "cors";// for cors handling
-import cookieParser from "cookie-parser";// for cookies
+import cors from "cors"; // for cors handling
+import cookieParser from "cookie-parser"; // for cookies
+import { RouteError } from "./Middlewares/errorMiddleware.js";
 
 // Importing all Routes Here
-
 
 // Express app initilisation
 export const app = express();
@@ -21,7 +21,6 @@ configDotenv({
   path: "./data/config.env",
 });
 
-
 //CORS
 app.use(
   cors({
@@ -33,15 +32,24 @@ app.use(
       "http://localhost:3001",
     ],
     method: ["GET", "POST", "DELETE", "PUT", "PATCH"],
-    credentials: true,  
+    credentials: true,
   })
 );
 
-
-// Routes 
-
+// Routes
 
 //Default route
 app.get("/", (req, res) => {
   res.status(200).json({ success: true, message: "All Systems Normal" });
+});
+
+app.all("*", (req, res, next) => {
+  const error = new RouteError("No such route", 404 ,req.url);
+  next(error);
+});
+
+// Global Error Middleware
+app.use((error, req, res, next) => {
+  if (!error) return next();
+  res.status(error.statusCode).json({ success: false, error: error });
 });

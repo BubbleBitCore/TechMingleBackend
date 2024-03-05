@@ -1,0 +1,28 @@
+# GlobalError is the Base Error Class that is used to handle All Global Errors
+
+To create new Errors Simply extend this Error Class and pass following arguments(message, statusCode...) in super 
+
++ example:
+
+export class RouteError extends GlobalError {
+  constructor(message, statusCode, route) {
+    super(message,statusCode);
+    this.route = route; // new field
+  }
+}
+
+
+The Error object contains following:
+
+    {
+        "statusCode": validStatusCode,
+        "type": ErrorType,
+        :
+        :
+    }
+
+
+
+To Throw Errors use the next() method of any route like so:
+    const error = new MyErrorType(message,statusCode,..rest arguments)
+    next(error)
