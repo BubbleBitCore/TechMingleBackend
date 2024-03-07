@@ -2,7 +2,7 @@ import express from "express";
 
 const router = express.Router();
 import { login, logout, signup } from "../controllers/auth.js";
-import { requestRateLimiter } from "../Middlewares/commonWare.js";
+import { requestRateLimiter } from "../middlewares/commonWare.js";
 
 router.post("/login",requestRateLimiter, login);
 router.get("/logout", logout);

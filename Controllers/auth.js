@@ -1,4 +1,4 @@
-import { GlobalError } from "../Middlewares/errorMiddleware.js";
+import { GlobalError } from "../middlewares/errorMiddleware.js";
 import { usersModel } from "../models/Users.js";
 import { hashPassword } from "../utils/hashPassword.js";
 import { sanitizeUser } from "../utils/sanitizeUser.js";

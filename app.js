@@ -2,15 +2,15 @@ import express from "express";
 import { configDotenv } from "dotenv"; // for handling Environment variables
 import path from "path";
 import cors from "cors"; // for handling cors
-import { HandleError, RouteError } from "./Middlewares/errorMiddleware.js"; // for handling errors
+import { HandleError, RouteError } from "./middlewares/errorMiddleware.js"; // for handling errors
 import cookieParser from "cookie-parser"; // for handling cookies
 import session from "express-session"; // for handling sessions
 import requestIp from "request-ip";
 import useragent from "express-useragent";
-import { logRequestDetails } from "./Middlewares/commonWare.js";
+import { logRequestDetails } from "./middlewares/commonWare.js";
 
 // Importing all Routes Here
-import authRouter from "./Routes/auth.js";
+import authRouter from "./routes/auth.js";
 
 // Express app initilisation
 export const app = express();
