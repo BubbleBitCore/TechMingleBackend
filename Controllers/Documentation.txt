@@ -1,0 +1,13 @@
+Note❗: All Controllers will follow Capitalize naming format to ensure consitency except for auth.js
+
+# Controllers
+
+1> Users Controller
+   → User releated controllers are coded here for example delete post ,add post ,like ,followers etc
+   → Related to Users model and Users Route
+
+2> auth Controller
+   → Auth releated controllers are coded here for example login ,logout, signup ,reset password etc
+   → Related to Users model and auth Route
+   
+

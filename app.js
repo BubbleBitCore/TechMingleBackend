@@ -1,11 +1,16 @@
 import express from "express";
-import { configDotenv } from "dotenv";
+import { configDotenv } from "dotenv"; // for handling Environment variables
 import path from "path";
-import cors from "cors"; // for cors handling
-import cookieParser from "cookie-parser"; // for cookies
-import { HandleError, RouteError } from "./Middlewares/errorMiddleware.js";
+import cors from "cors"; // for handling cors
+import { HandleError, RouteError } from "./Middlewares/errorMiddleware.js"; // for handling errors
+import cookieParser from "cookie-parser"; // for handling cookies
+import session from "express-session"; // for handling sessions
+import requestIp from "request-ip";
+import useragent from "express-useragent";
+import { logRequestDetails } from "./Middlewares/commonWare.js";
 
 // Importing all Routes Here
+import authRouter from "./Routes/auth.js";
 
 // Express app initilisation
 export const app = express();
@@ -16,6 +21,10 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true })); // for parsing html form data
 app.use(express.static(path.join(path.resolve(), "public")));
 app.set("view engine", "ejs");
+app.use(useragent.express()); // Middleware to parse User-Agent header
+app.use(requestIp.mw()); // Middleware for getting IP addresses
+app.use(logRequestDetails); // Middleware to log request information
+
 //environment variables
 configDotenv({
   path: "./data/config.env",
@@ -36,7 +45,8 @@ app.use(
   })
 );
 
-// Routes
+// Routes // v1 designation for v1 api
+app.use("/v1/auth", authRouter);
 
 //Default route
 app.get("/", (req, res) => {
@@ -44,7 +54,7 @@ app.get("/", (req, res) => {
 });
 
 app.all("*", (req, res, next) => {
-  const error = new RouteError("No such route", 404 ,req.url);
+  const error = new RouteError("No such route", 404, req.url);
   next(error);
 });
 

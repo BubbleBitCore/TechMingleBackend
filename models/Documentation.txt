@@ -1,0 +1,7 @@
+Note❗: All models should adhere to the capitalized format in their file names. For instance, a model for managing users should be named "Users.js".
+
+# Models
+
+1> Users.js
+   → Contains User related information
+   → Fields such as name,email,password,mobileNo,createdAt etc

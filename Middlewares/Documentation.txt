@@ -1,8 +1,11 @@
+All Middlewares are listed here 👇
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # GlobalError is the Base Error Class that is used to handle All Global Errors
 
-To create new Errors Simply extend this Error Class and pass following arguments(message, statusCode...) in super 
+🟢 To create new Errors Simply extend this Error Class and pass following arguments(message, statusCode...) in super constructor
 
-+ example:
++ example: Let's create a custom error class which is related to faulty routes
 
 export class RouteError extends GlobalError {
   constructor(message, statusCode, route) {
@@ -27,3 +30,19 @@ The Error object contains following:
 To Throw Errors use the next() method of any route like so:
     const error = new MyErrorType(message,statusCode,..rest arguments)
     next(error)
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# isAuthenticated Middleware is used for protecting routes from unAuthenticated Access
+ → Use this middleware to restrict Access 
+ → Responses a JSON Object with StatusCode 401 
+ → Only valid user can pass   
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# CommonWare Middlewares
+  1>logRequestDetails Middleware
+    → This middleware is utilized to gather information about the device that has requested server,     details including its location, public IP address, and device specifications.
+    → This middleware adds the above details to the `req` object for further usage, labeling them with keys such as "IP_ADDRESS," "DEVICE_LOCATION," and "DEVICE." 
+  
+  2>requestRateLimiter Middleware
+  → This middleware is used to limit the number of requests on any route
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

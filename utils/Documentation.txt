@@ -1,0 +1,12 @@
+Note❗: All utility functions are implemented within this codebase. These utilities enhance system efficiency and manage various services, including sending HTML emails, sanitizing data, and hashing objects.
+
+# Utils
+
+1> hashPassword
+   → This function helps in hashing passwords to ensure password security .
+   → Used in password storing and password matching
+   → Algorithm used : SHA-256
+
+2> sanitizeUser
+   → This function helps in sanitizing user objects to remove unwanted information such as __v,password etc .
+

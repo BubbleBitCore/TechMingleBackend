@@ -1,0 +1,14 @@
+Note❗: All Routes will follow Capitalize naming format to ensure consitency except for auth.js
+
+# Routes
+
+1> Users Routes
+   → User releated Routes are coded here such as CRUD operations for user
+   → Related to Users model and Users Controllers
+
+2> auth Routes
+   → Auth releated routes are coded here for example login ,logout, signup ,reset password etc
+   → Related to Users model and auth Controller
+   → login route has implemented via rateLimiting middleware to ensure security (5 attempts for single IP)
+   
+

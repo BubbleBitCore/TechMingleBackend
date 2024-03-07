@@ -1,5 +1,5 @@
 export class GlobalError extends Error {
-  constructor(message, statusCode) {
+  constructor(message, statusCode=500) {
     super(message);
     this.statusCode = statusCode;
     this.type = this.constructor.name;
