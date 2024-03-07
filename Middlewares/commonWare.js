@@ -7,15 +7,15 @@ export const logRequestDetails = (req, res, next) => {
   const userAgent = req.useragent;
 
   // Get location based on IP address
-  const geo = geoip.lookup("157.32.210.253");
+  const geo = geoip.lookup(ip);
   const location = geo
     ? `${geo.city}, ${geo.region}, ${geo.country}`
     : "Unknown";
 
   // Log request information
-  req.IP_ADDRESS = `IP Address: ${ip}`;
-  req.DEVICE_LOCATION = `Location: ${location}`;
-  req.DEVICE = `${userAgent.platform}, ${userAgent.os}, ${userAgent.browser}`;
+  req.IP_ADDRESS = `${ip}`;
+  req.DEVICE_LOCATION = `${location}`;
+  req.DEVICE = `${userAgent.platform}-${userAgent.os}-${userAgent.browser}`;
 
   next();
 };

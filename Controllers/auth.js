@@ -21,6 +21,11 @@ export const login = async (req, res, next) => {
       const error = new GlobalError("Invalid email or password!", 500);
       return next(error);
     }
+    req.session.isAuth = true;
+    req.session.userId = user._id;
+    req.session.location = req.DEVICE_LOCATION;
+    req.session.device = req.DEVICE;
+    req.session.ip_address = req.IP_ADDRESS;
     res.status(200).json({
       success: true,
       message: "Login successful",
@@ -31,7 +36,10 @@ export const login = async (req, res, next) => {
     next(error);
   }
 };
-export const logout = async (req, res, next) => {};
+export const logout = async (req, res, next) => {
+  req.session.destroy();
+  res.status(200).json({ success: true, message: "Logged out!" });
+};
 
 export const signup = async (req, res, next) => {
   try {

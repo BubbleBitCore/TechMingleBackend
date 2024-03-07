@@ -7,10 +7,13 @@ import cookieParser from "cookie-parser"; // for handling cookies
 import session from "express-session"; // for handling sessions
 import requestIp from "request-ip";
 import useragent from "express-useragent";
+import MongoStore from "connect-mongo";
 import { logRequestDetails } from "./middlewares/commonWare.js";
 
 // Importing all Routes Here
 import authRouter from "./routes/auth.js";
+import usersRouter from "./routes/Users.js";
+import { isAuthenticated } from "./middlewares/auth.js";
 
 // Express app initilisation
 export const app = express();
@@ -30,6 +33,21 @@ configDotenv({
   path: "./data/config.env",
 });
 
+// Handling session
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGODB_URI,
+      ttl: process.env.SESSION_EXPIRY,
+      autoRemove: "interval",
+      autoRemoveInterval: 1,
+    }),
+  })
+);
+
 //CORS
 app.use(
   cors({
@@ -47,6 +65,7 @@ app.use(
 
 // Routes // v1 designation for v1 api
 app.use("/v1/auth", authRouter);
+app.use("/v1/user",isAuthenticated, usersRouter);
 
 //Default route
 app.get("/", (req, res) => {
