@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 
-export const sendMail = (
+export const sendMail = async (
   from,
   pass,
   recipient,
@@ -12,7 +12,7 @@ export const sendMail = (
   let transporter = nodemailer.createTransport({
     service: "Gmail",
     secure: true, // Use a secure connection (TLS)
-    port: 465,
+    port: process.env.SMTP_PORT,
     auth: {
       user: from,
       pass: pass,

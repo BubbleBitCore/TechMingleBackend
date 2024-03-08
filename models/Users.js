@@ -33,6 +33,10 @@ const usersSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  verified: {
+    type: Boolean,
+    default: false,
+  },
   role: {
     type: String,
     default: ROLE_USER, // role can be either user(nornal user) or admin
