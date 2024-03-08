@@ -1,6 +1,7 @@
 import { GlobalError } from "../middlewares/errorMiddleware.js";
 import { usersModel } from "../models/Users.js";
 import { hashPassword } from "../utils/hashPassword.js";
+import { sendMail } from "../utils/mailer.js";
 import { sanitizeUser } from "../utils/sanitizeUser.js";
 
 export const login = async (req, res, next) => {
@@ -60,7 +61,16 @@ export const signup = async (req, res, next) => {
       mobileNo,
       password: hashPassword(password),
     });
-
+    const subject = `Registration Successfull | ${user.name}`;
+    const message = `Thank you for choosing us ${user.name}`;
+    sendMail(
+      process.env.FROM,
+      process.env.PASS,
+      user.email,
+      subject,
+      message,
+      user.name
+    );
     res.status(200).json({
       success: true,
       message: `User Created !`,

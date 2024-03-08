@@ -28,8 +28,8 @@ The Error object contains following:
 
 
 To Throw Errors use the next() method of any route like so:
-    const error = new MyErrorType(message,statusCode,..rest arguments)
-    next(error)
+    const error = new MyErrorType(message,statusCode,..rest arguments);
+    return next(error);
 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # isAuthenticated Middleware is used for protecting routes from unAuthenticated Access
