@@ -28,7 +28,7 @@ app.set("view engine", "ejs");
 app.use(useragent.express()); // Middleware to parse User-Agent header
 app.use(requestIp.mw()); // Middleware for getting IP addresses
 app.use(logRequestDetails); // Middleware to log request information
-app.use(helmet());
+app.use(helmet()); // for improved security
 
 //environment variables
 configDotenv({
