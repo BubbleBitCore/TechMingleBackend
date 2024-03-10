@@ -8,6 +8,7 @@ import session from "express-session"; // for handling sessions
 import requestIp from "request-ip";
 import useragent from "express-useragent";
 import MongoStore from "connect-mongo";
+import helmet from "helmet";
 import { logRequestDetails } from "./middlewares/commonWare.js";
 
 // Importing all Routes Here
@@ -27,6 +28,7 @@ app.set("view engine", "ejs");
 app.use(useragent.express()); // Middleware to parse User-Agent header
 app.use(requestIp.mw()); // Middleware for getting IP addresses
 app.use(logRequestDetails); // Middleware to log request information
+app.use(helmet());
 
 //environment variables
 configDotenv({

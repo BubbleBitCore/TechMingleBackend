@@ -13,7 +13,7 @@ import {
 } from "../controllers/Users.js";
 import { requestRateLimiter } from "../middlewares/commonWare.js";
 
-router.delete("/deleteUser", isAuthenticated, deleteUser);
+router.delete("/deleteUser/:userId", isAuthenticated, deleteUser);
 
 router.delete("/deleteSession", isAuthenticated, deleteSession);
 router.delete("/deleteAllSessions", deleteAllSessions);
