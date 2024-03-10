@@ -13,6 +13,7 @@ import { logRequestDetails } from "./middlewares/commonWare.js";
 // Importing all Routes Here
 import authRouter from "./routes/auth.js";
 import usersRouter from "./routes/Users.js";
+import garbageRouter from "./routes/Garbage.js";
 
 // Express app initilisation
 export const app = express();
@@ -65,6 +66,7 @@ app.use(
 // Routes // v1 designation for v1 api
 app.use("/v1/auth", authRouter);
 app.use("/v1/user", usersRouter);
+app.use("/v1/garbage", garbageRouter);
 
 //Default route
 app.get("/", (req, res) => {
