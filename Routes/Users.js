@@ -7,6 +7,7 @@ import {
   getAllSessions,
   getUser,
   deleteUser,
+  updateUser,
   forgotPassword,
   resetPassword,
   deleteAllSessions,
@@ -14,12 +15,13 @@ import {
 import { requestRateLimiter } from "../middlewares/commonWare.js";
 
 router.delete("/deleteUser/:userId", isAuthenticated, deleteUser);
+router.patch("/updateUser/:userId", isAuthenticated, updateUser);
 
 router.delete("/deleteSession", isAuthenticated, deleteSession);
 router.delete("/deleteAllSessions", deleteAllSessions);
 router.get("/getSessions", isAuthenticated, getAllSessions);
 router.get("/me", isAuthenticated, getUser);
-router.get("/resetPassword",requestRateLimiter, resetPassword);
+router.get("/resetPassword", requestRateLimiter, resetPassword);
 router.get("/forgotPassword", forgotPassword);
 
 export default router;

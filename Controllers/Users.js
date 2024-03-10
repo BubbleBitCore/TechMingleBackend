@@ -91,6 +91,26 @@ export const deleteUser = async (req, res, next) => {
   }
 };
 
+export const updateUser = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const update = { ...req.body };
+    delete update.email;
+    delete update.password;
+    delete update.role; 
+    delete update._id;
+    const user = await usersModel.findByIdAndUpdate(
+      userId,
+      { ...update },
+      { new: true }
+    );
+    res.status(200).json({ success: true, message: "User updated!",user });
+  } catch (err) {
+    const error = new GlobalError(err.message, 500);
+    next(error);
+  }
+};
+
 export const forgotPassword = async (req, res, next) => {
   try {
     const { email } = req.body;
