@@ -11,11 +11,18 @@ import {
   forgotPassword,
   resetPassword,
   deleteAllSessions,
+  followRequest,
+  getFollowers,
+  getFollowings,
 } from "../controllers/Users.js";
 import { requestRateLimiter } from "../middlewares/commonWare.js";
 
 router.delete("/deleteUser/:userId", isAuthenticated, deleteUser);
 router.patch("/updateUser/:userId", isAuthenticated, updateUser);
+
+router.post("/follow", isAuthenticated, followRequest);
+router.get("/getfollowers", isAuthenticated, getFollowers);
+router.get("/getfollowings", isAuthenticated, getFollowings);
 
 router.delete("/deleteSession", isAuthenticated, deleteSession);
 router.delete("/deleteAllSessions", deleteAllSessions);

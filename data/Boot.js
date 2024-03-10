@@ -13,7 +13,7 @@ const Boot = () => {
       });
     })
     .catch((e) => {
-      console.log("Error", e.message);
+      console.log("Error:", "DB Error");
     });
 };
 

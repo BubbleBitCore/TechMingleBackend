@@ -1,5 +1,7 @@
+import mongoose from "mongoose";
 import { GlobalError } from "../middlewares/errorMiddleware.js";
 import { sessionsModel } from "../models/Sessions.js";
+import { userRelationshipsModel } from "../models/UserRelationship.js";
 import { usersModel } from "../models/Users.js";
 import { hashPassword } from "../utils/hashPassword.js";
 import { sendMail } from "../utils/mailer.js";
@@ -76,6 +78,10 @@ export const getUser = async (req, res, next) => {
 };
 
 export const deleteUser = async (req, res, next) => {
+  // Starting a MongoDB transaction
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
   try {
     const { userId } = req.params;
     const user = await usersModel.findByIdAndDelete(userId);
@@ -83,11 +89,23 @@ export const deleteUser = async (req, res, next) => {
       const error = new GlobalError("Can't find user", 404);
       return next(error);
     }
+    // remove relationship with other users once deleted
+    await userRelationshipsModel.deleteMany({
+      $or: [{ userId:userId }, { followedUserId:userId }],
+    });
+    //deleting a user session on client on deleteuser
     req.session.destroy();
+    // committing changes to database
+    await session.commitTransaction();
     res.status(200).json({ success: true, message: "Deleted User!" });
   } catch (err) {
     const error = new GlobalError(err.message, 500);
+    // Aborting the session
+    await session.abortTransaction();
     next(error);
+  } finally {
+    // End the session
+    session.endSession();
   }
 };
 
@@ -97,14 +115,14 @@ export const updateUser = async (req, res, next) => {
     const update = { ...req.body };
     delete update.email;
     delete update.password;
-    delete update.role; 
+    delete update.role;
     delete update._id;
     const user = await usersModel.findByIdAndUpdate(
       userId,
       { ...update },
       { new: true }
     );
-    res.status(200).json({ success: true, message: "User updated!",user });
+    res.status(200).json({ success: true, message: "User updated!", user });
   } catch (err) {
     const error = new GlobalError(err.message, 500);
     next(error);
@@ -140,7 +158,7 @@ export const forgotPassword = async (req, res, next) => {
     );
     res.status(200).json({ success: true, message: "Check your email" });
   } catch (err) {
-    const error = new GlobalError(err.message, 404);
+    const error = new GlobalError(err.message, 500);
     return next(error);
   }
 };
@@ -170,7 +188,78 @@ export const resetPassword = async (req, res, next) => {
       });
     });
   } catch (err) {
-    const error = new GlobalError(err.message, 404);
+    const error = new GlobalError(err.message, 500);
+    return next(error);
+  }
+};
+
+export const followRequest = async (req, res, next) => {
+  try {
+    const userId = req.session.userId;
+    const { followedUserId } = req.body;
+    if (userId === followedUserId) {
+      const error = new GlobalError("Invalid request", 500);
+      return next(error);
+    }
+    let user = await usersModel.findById(userId);
+    let followedUser = await usersModel.findById(followedUserId);
+
+    if (!user || !followedUser) {
+      const error = new GlobalError("Follow request failed", 500);
+      return next(error);
+    }
+
+    await userRelationshipsModel.create({ userId, followedUserId });
+    res.status(200).json({
+      success: true,
+      message: `Followed ${followedUser.name}`,
+    });
+  } catch (err) {
+    const error = new GlobalError(err.message, 500);
+    return next(error);
+  }
+};
+
+export const getFollowers = async (req, res, next) => {
+  try {
+    const userId = req.session.userId;
+    let user = await usersModel.findById(userId);
+    if (!user) {
+      const error = new GlobalError("User not found", 404);
+      return next(error);
+    }
+
+    const relations = await userRelationshipsModel.find({
+      followedUserId: userId,
+    });
+    res.status(200).json({
+      success: true,
+      relations,
+    });
+  } catch (err) {
+    const error = new GlobalError(err.message, 500);
+    return next(error);
+  }
+};
+
+export const getFollowings = async (req, res, next) => {
+  try {
+    const userId = req.session.userId;
+    let user = await usersModel.findById(userId);
+    if (!user) {
+      const error = new GlobalError("User not found", 404);
+      return next(error);
+    }
+
+    const relations = await userRelationshipsModel.find({
+      userId,
+    });
+    res.status(200).json({
+      success: true,
+      relations,
+    });
+  } catch (err) {
+    const error = new GlobalError(err.message, 500);
     return next(error);
   }
 };

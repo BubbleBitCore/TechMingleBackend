@@ -7,7 +7,7 @@ Note❗: All Controllers will follow Capitalize naming format to ensure consiten
    → Related to Users model and Users Route
 
 2> auth Controller
-   → Auth releated controllers are coded here for example login ,logout, signup ,reset password etc
+   → Auth related controllers are coded here for example login ,logout, signup ,reset password etc
    → Related to Users model and auth Route
-   
+   → once a user is loggedIn successfully, using auth/login route we can access user's ID via session ex: req.session.userId , there are many things which get attached to the session , for more information see=> controllers/auth.js>login file.
 
